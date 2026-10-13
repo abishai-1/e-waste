@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - About the Community Service Project</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .about-section {
+      margin-bottom: 2.5rem;
+    }
+    .about-list {
+      margin-left: 1.5rem;
+      margin-top: 0.5rem;
+      margin-bottom: 1rem;
+    }
+    .about-list li {
+      margin-bottom: 0.4rem;
+    }
+    .photo-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.25rem;
+      margin-top: 1.25rem;
+    }
+    .photo-slot {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .photo-fallback {
+      height: 180px;
+      background: var(--surface-alt);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .photo-slot img {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-slot-caption {
+      padding: 0.75rem 0.85rem;
+      font-size: 0.84rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+    @media (max-width: 900px) {
+      .photo-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 500px) {
+      .photo-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="about_title">About CleanEarth Community Service Project</h1>
+      <p class="lead-text" data-i18n="about_lead">Project documentation, technical architecture, community outreach methodology, limitations, and future scope.</p>
+
+      <!-- 1. Executive Summary -->
+      <section class="about-section" aria-labelledby="exec-heading">
+        <h2 id="exec-heading" data-i18n="about_exec_title">Executive Summary</h2>
+        <div class="card">
+          <p data-i18n="about_exec_p1">CleanEarth is an undergraduate Community Service Project (CSP) website created to help households, students, and community volunteers in Andhra Pradesh understand and practise waste separation at source.</p>
+          <p data-i18n="about_exec_p2" style="margin-bottom:0;">Rather than claiming hypothetical impact figures, CleanEarth functions as an educational reference tool. It explains the four-bin framework plainly, provides direct lookups for 40+ household items, offers interactive practice tools, and records field survey feedback directly on volunteer devices.</p>
+        </div>
+      </section>
+
+      <!-- 2. Problem Statement -->
+      <section class="about-section" aria-labelledby="problem-heading">
+        <h2 id="problem-heading" data-i18n="about_prob_title">Problem Statement</h2>
+        <div class="card">
+          <p data-i18n="about_prob_p1">Municipal solid waste management in urban and peri-urban areas encounters severe operational hurdles when waste is mixed at the source.</p>
+          <p data-i18n="about_prob_p2" style="margin-bottom:0;">When wet kitchen waste, recyclable dry goods, hazardous materials, and electronic scrap are discarded together, organic material spoils recyclable paper and cardboard, broken glass and batteries injure sanitation workers, and compost made from contaminated wet waste is unsafe for agricultural soil. Clear, accessible guidance at the household level is the essential first step.</p>
+        </div>
+      </section>
+
+      <!-- 3. Key Modules -->
+      <section class="about-section" aria-labelledby="modules-heading">
+        <h2 id="modules-heading" data-i18n="about_modules_title">Key Modules and Architecture</h2>
+        <div class="grid-2">
+          <div class="card">
+            <h3><a href="bin-guide.html" data-i18n="nav_bin_guide">Bin Guide</a></h3>
+            <p data-i18n="home_learn_more">Detailed instructions on what goes into each bin, what must be kept out, handling practices, and common household examples.</p>
+          </div>
+          <div class="card">
+            <h3><a href="item-directory.html" data-i18n="nav_directory">Item Directory</a></h3>
+            <p data-i18n="tool_dir_desc">Search through over 40 household waste items to find the right bin and handling tip instantly.</p>
+          </div>
+          <div class="card">
+            <h3><a href="bin-it-right.html" data-i18n="nav_game">Bin It Right Game</a></h3>
+            <p data-i18n="tool_game_desc">Practice sorting 15 random items into the correct bins with immediate feedback.</p>
+          </div>
+          <div class="card">
+            <h3><a href="eco-quiz.html" data-i18n="nav_quiz">Eco Quiz</a></h3>
+            <p data-i18n="tool_quiz_desc">Test your knowledge on segregation, safety, composting, and recycling rules with 10 questions.</p>
+          </div>
+          <div class="card">
+            <h3><a href="five-rs.html" data-i18n="nav_five_rs">5 R's Hierarchy</a></h3>
+            <p data-i18n="tool_fivers_desc">Understand waste management priorities from Refuse and Reduce down to Recycling.</p>
+          </div>
+          <div class="card">
+            <h3><a href="footprint-calculator.html" data-i18n="nav_calculator">Footprint Calculator</a></h3>
+            <p data-i18n="tool_calc_desc">Estimate your household's annual waste generation and see the effect of source segregation.</p>
+          </div>
+          <div class="card">
+            <h3><a href="survey.html" data-i18n="nav_survey">Community Survey</a></h3>
+            <p data-i18n="tool_survey_desc">Record waste segregation habits, community barriers, and awareness levels during field visits.</p>
+          </div>
+          <div class="card">
+            <h3><a href="pledge.html" data-i18n="nav_pledge">Household Pledge</a></h3>
+            <p data-i18n="tool_pledge_desc">Commit to simple daily waste segregation actions and generate a printable certificate.</p>
+          </div>
+          <div class="card">
+            <h3><a href="ewaste-centers.html" data-i18n="nav_ewaste">E-Waste Centres</a></h3>
+            <p data-i18n="tool_ewaste_desc">Look up sample recycling plants and collection drop-off points with accepted item filters.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 4. Implementation and Technical Design -->
+      <section class="about-section" aria-labelledby="tech-heading">
+        <h2 id="tech-heading" data-i18n="about_tech_title">Implementation and Technical Design</h2>
+        <div class="card">
+          <p data-i18n="about_tech_desc">The website is built entirely using standard HTML5, CSS3, and vanilla JavaScript. It has no external dependencies, no JS libraries, no backend servers, and no build pipeline. It runs immediately when opening index.html directly from a local drive and deploys without modification to GitHub Pages.</p>
+
+          <h3 data-i18n="about_flow_title">Application Architecture Flow</h3>
+          <p data-i18n="about_flow_p">The browser loads the static HTML structure; CSS variables supply light or dark themes without page flickering; JavaScript modules handle live filtering, quiz logic, input validation, and localStorage operations locally without network roundtrips.</p>
+
+          <p><strong>Technical Principles Applied:</strong></p>
+          <ul class="about-list">
+            <li><strong>Zero frameworks:</strong> Built solely with native DOM APIs, ES5/ES6 syntax, and standard CSS3 custom properties.</li>
+            <li><strong>Strict flat colour styling:</strong> No background gradients, zero emojis, and zero non-standard animations.</li>
+            <li><strong>High accessibility contrast:</strong> Maintained strictly above 4.5:1 ratio across light (#F8F7EF) and dark (#10241F) palettes.</li>
+            <li><strong>Privacy-first storage:</strong> Surveys, quiz scores, and settings persist exclusively within client-side localStorage.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- 5. Field Survey and Community Outreach -->
+      <section class="about-section" aria-labelledby="outreach-heading">
+        <h2 id="outreach-heading" data-i18n="about_outreach_title">Field Survey and Community Outreach</h2>
+        <div class="card">
+          <p data-i18n="about_outreach_desc">During field visits, student volunteers visit households to introduce the four-bin system, demonstrate sorting with the 'Bin It Right' game, answer resident questions using the item directory, and administer the survey.</p>
+
+          <h3 data-i18n="about_indicators_title">Evaluation Indicators</h3>
+          <ul class="about-list">
+            <li data-i18n="about_ind_1">Number of outreach participants and completed field surveys.</li>
+            <li data-i18n="about_ind_2">Change in correct classification answers before and after the briefing session.</li>
+            <li data-i18n="about_ind_3">Self-reported frequency of household waste segregation.</li>
+            <li data-i18n="about_ind_4">Most commonly misclassified items and unresolved community doubts.</li>
+          </ul>
+
+          <div class="callout callout-warning">
+            <p><strong data-i18n="about_no_claims">No measured results are reported here. Outcomes will be added only after field records are collected and checked.</strong></p>
+          </div>
+        </div>
+
+        <!-- 8 Photo Slots with CSS Fallback Blocks -->
+        <h3 id="gallery-heading" style="margin-top: 1.75rem;" data-i18n="about_gallery_title">Field Activity Documentation</h3>
+        <p class="sub-lead" data-i18n="about_gallery_desc">Photographs taken during community outreach sessions will be documented here. Placeholder slots are provided below.</p>
+
+        <div class="photo-grid">
+          <!-- 1 -->
+          <div class="photo-slot">
+            <img src="images/photo-1.jpg" alt="Household segregation demonstration" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 1</strong>
+              <span>images/photo-1.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 1</div>
+          </div>
+
+          <!-- 2 -->
+          <div class="photo-slot">
+            <img src="images/photo-2.jpg" alt="Bin It Right game trial with residents" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 2</strong>
+              <span>images/photo-2.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 2</div>
+          </div>
+
+          <!-- 3 -->
+          <div class="photo-slot">
+            <img src="images/photo-3.jpg" alt="Item directory walkthrough on mobile device" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 3</strong>
+              <span>images/photo-3.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 3</div>
+          </div>
+
+          <!-- 4 -->
+          <div class="photo-slot">
+            <img src="images/photo-4.jpg" alt="Discussion on hazardous and e-waste collection channels" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 4</strong>
+              <span>images/photo-4.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 4</div>
+          </div>
+
+          <!-- 5 -->
+          <div class="photo-slot">
+            <img src="images/photo-5.jpg" alt="5 R's explanation session" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 5</strong>
+              <span>images/photo-5.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 5</div>
+          </div>
+
+          <!-- 6 -->
+          <div class="photo-slot">
+            <img src="images/photo-6.jpg" alt="Survey response collection with community members" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 6</strong>
+              <span>images/photo-6.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 6</div>
+          </div>
+
+          <!-- 7 -->
+          <div class="photo-slot">
+            <img src="images/photo-7.jpg" alt="Household pledge and certificate presentation" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 7</strong>
+              <span>images/photo-7.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 7</div>
+          </div>
+
+          <!-- 8 -->
+          <div class="photo-slot">
+            <img src="images/photo-8.jpg" alt="Community group discussion on waste segregation barriers" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div class="photo-fallback" style="display:none;">
+              <strong>Photo 8</strong>
+              <span>images/photo-8.jpg</span>
+            </div>
+            <div class="photo-slot-caption"><span data-i18n="about_photo_caption">Community service activity documentation</span> &bull; Slot 8</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Limitations and Future Scope -->
+      <section class="about-section" aria-labelledby="limits-heading">
+        <div class="grid-2">
+          <div class="card">
+            <h2 id="limits-heading" data-i18n="about_limits_title">Limitations</h2>
+            <ul class="about-list">
+              <li data-i18n="about_lim_1">Guidance depends on voluntary resident action at home.</li>
+              <li data-i18n="about_lim_2">Calculator estimates depend on self-reported inputs and assumed factors, not physical measurements.</li>
+              <li data-i18n="about_lim_3">A website alone cannot ensure timely or separate municipal collection in every ward.</li>
+            </ul>
+          </div>
+
+          <div class="card">
+            <h2 id="future-heading" data-i18n="about_future_title">Future Scope</h2>
+            <ul class="about-list">
+              <li data-i18n="about_fut_1">Expansion of Telugu audio guidance for elder residents and non-literate community members.</li>
+              <li data-i18n="about_fut_2">Ward-specific collection timetable integration with local municipal corporations.</li>
+              <li data-i18n="about_fut_3">Broader physical device testing and offline progressive web application enhancements.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

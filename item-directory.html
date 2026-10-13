@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Household Item Directory</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .search-container {
+      margin: 1.5rem 0 1rem 0;
+    }
+    .directory-results {
+      margin-top: 1.5rem;
+    }
+    .item-card {
+      border-left-width: 6px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .item-card.bin-wet { border-left-color: var(--bin-wet); }
+    .item-card.bin-dry { border-left-color: var(--bin-dry); }
+    .item-card.bin-hazardous { border-left-color: var(--bin-hazardous); }
+    .item-card.bin-ewaste { border-left-color: var(--bin-ewaste); }
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.75rem;
+      gap: 0.5rem;
+    }
+    .item-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .empty-state {
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: var(--surface);
+      border: 1px dashed var(--border-strong);
+      border-radius: var(--radius-card);
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="dir_title">Household Item Directory</h1>
+      <p class="lead-text" data-i18n="dir_lead">Find the recommended disposal bin and handling tip for everyday household items.</p>
+
+      <div class="search-container">
+        <label for="item-search" class="visually-hidden" data-i18n="dir_search_placeholder">Search item...</label>
+        <input type="text" id="item-search" data-i18n-placeholder="dir_search_placeholder" placeholder="Search item (e.g., banana peel, battery, newspaper)..." autocomplete="off">
+      </div>
+
+      <!-- Filter Buttons -->
+      <div class="filter-bar" role="toolbar" aria-label="Filter items by waste stream">
+        <button class="filter-btn active" data-filter="all" data-i18n="dir_filter_all">All Items</button>
+        <button class="filter-btn" data-filter="wet"><span data-i18n="bin_wet_color">Green</span> &bull; <span data-i18n="bin_wet">Wet Waste</span></button>
+        <button class="filter-btn" data-filter="dry"><span data-i18n="bin_dry_color">Blue</span> &bull; <span data-i18n="bin_dry">Dry Waste</span></button>
+        <button class="filter-btn" data-filter="hazardous"><span data-i18n="bin_hazardous_color">Red</span> &bull; <span data-i18n="bin_hazardous">Hazardous Waste</span></button>
+        <button class="filter-btn" data-filter="ewaste"><span data-i18n="bin_ewaste_color">Purple</span> &bull; <span data-i18n="bin_ewaste">E-Waste</span></button>
+      </div>
+
+      <!-- Live Results Count -->
+      <div id="result-status" class="sub-lead" aria-live="polite"></div>
+
+      <!-- Cards Grid -->
+      <div id="directory-list" class="grid-3 directory-results"></div>
+
+      <!-- Empty State -->
+      <div id="empty-state" class="empty-state" style="display: none;">
+        <h3 data-i18n="dir_not_found">Item not found in this directory.</h3>
+        <p data-i18n="dir_not_found_tip">Please check your local municipal instructions or search with a different keyword.</p>
+      </div>
+
+      <div class="callout" style="margin-top: 2.5rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/item-directory.js"></script>
+</body>
+</html>

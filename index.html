@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Household Waste Segregation Guide</title>
+  <!-- Anti-flash inline theme loader -->
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <!-- Google Fonts Noto Sans Telugu with fallback system font stack -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <!-- Purpose Statement -->
+      <section class="home-intro" aria-labelledby="home-heading">
+        <h1 id="home-heading" data-i18n="home_h1">Check which bin an item goes in before you throw it away.</h1>
+        <p class="lead-text" data-i18n="home_lead">A Community Service Project reference tool for households in Andhra Pradesh to make source waste segregation simpler and reliable.</p>
+        <div class="btn-group">
+          <a href="item-directory.html" class="btn btn-primary" data-i18n="home_btn_directory">Open item directory</a>
+          <a href="bin-it-right.html" class="btn btn-secondary" data-i18n="home_btn_game">Play Bin It Right</a>
+        </div>
+      </section>
+
+      <!-- Four-Bin Framework Cards -->
+      <section class="home-bins-section" aria-labelledby="bins-heading">
+        <h2 id="bins-heading" data-i18n="home_bins_heading">The Four-Bin Framework</h2>
+        <div class="grid-4">
+          <!-- Green Wet -->
+          <article class="card bin-card bin-wet">
+            <div>
+              <span class="bin-badge badge-wet"><span data-i18n="bin_wet_color">Green</span> &bull; <span data-i18n="bin_wet">Wet Waste</span></span>
+              <p data-i18n="home_wet_desc">Food scraps, fruit and vegetable peels, tea leaves, and garden waste. Kept separate for composting or organic processing.</p>
+            </div>
+            <a href="bin-guide.html" class="btn btn-secondary" style="margin-top:1rem; width:100%;" data-i18n="home_learn_more">Read bin guide</a>
+          </article>
+
+          <!-- Blue Dry -->
+          <article class="card bin-card bin-dry">
+            <div>
+              <span class="bin-badge badge-dry"><span data-i18n="bin_dry_color">Blue</span> &bull; <span data-i18n="bin_dry">Dry Waste</span></span>
+              <p data-i18n="home_dry_desc">Clean paper, cardboard, metal cans, glass, and recyclable packaging. Keep clean and dry as practical.</p>
+            </div>
+            <a href="bin-guide.html" class="btn btn-secondary" style="margin-top:1rem; width:100%;" data-i18n="home_learn_more">Read bin guide</a>
+          </article>
+
+          <!-- Red Hazardous -->
+          <article class="card bin-card bin-hazardous">
+            <div>
+              <span class="bin-badge badge-hazardous"><span data-i18n="bin_hazardous_color">Red</span> &bull; <span data-i18n="bin_hazardous">Hazardous Waste</span></span>
+              <p data-i18n="home_hazardous_desc">Chemicals, certain batteries, and bulbs. Need careful handling and appropriate collection.</p>
+            </div>
+            <a href="bin-guide.html" class="btn btn-secondary" style="margin-top:1rem; width:100%;" data-i18n="home_learn_more">Read bin guide</a>
+          </article>
+
+          <!-- Purple E-waste -->
+          <article class="card bin-card bin-ewaste">
+            <div>
+              <span class="bin-badge badge-ewaste"><span data-i18n="bin_ewaste_color">Purple</span> &bull; <span data-i18n="bin_ewaste">E-Waste</span></span>
+              <p data-i18n="home_ewaste_desc">Old phones, chargers, cables, keyboards, and other electronics. Go to authorised e-waste collection channels.</p>
+            </div>
+            <a href="bin-guide.html" class="btn btn-secondary" style="margin-top:1rem; width:100%;" data-i18n="home_learn_more">Read bin guide</a>
+          </article>
+        </div>
+      </section>
+
+      <!-- Tool Grid -->
+      <section class="home-tools-section" aria-labelledby="tools-heading">
+        <h2 id="tools-heading" data-i18n="home_tools_heading">Project Tools and Modules</h2>
+        <div class="grid-4">
+          <div class="card">
+            <h3 data-i18n="tool_dir_title">Item Directory</h3>
+            <p data-i18n="tool_dir_desc">Search through over 40 household waste items to find the right bin and handling tip instantly.</p>
+            <a href="item-directory.html" class="btn btn-secondary" data-i18n="nav_directory">Item Directory</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_game_title">Bin It Right Game</h3>
+            <p data-i18n="tool_game_desc">Practice sorting 15 random items into the correct bins with immediate feedback.</p>
+            <a href="bin-it-right.html" class="btn btn-secondary" data-i18n="nav_game">Bin It Right</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_quiz_title">Eco Quiz</h3>
+            <p data-i18n="tool_quiz_desc">Test your knowledge on segregation, safety, composting, and recycling rules with 10 questions.</p>
+            <a href="eco-quiz.html" class="btn btn-secondary" data-i18n="nav_quiz">Eco Quiz</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_fivers_title">The 5 R's Hierarchy</h3>
+            <p data-i18n="tool_fivers_desc">Understand waste management priorities from Refuse and Reduce down to Recycling.</p>
+            <a href="five-rs.html" class="btn btn-secondary" data-i18n="nav_five_rs">5 R's</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_calc_title">Footprint Calculator</h3>
+            <p data-i18n="tool_calc_desc">Estimate your household's annual waste generation and see the effect of source segregation.</p>
+            <a href="footprint-calculator.html" class="btn btn-secondary" data-i18n="nav_calculator">Footprint Calculator</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_survey_title">Community Survey</h3>
+            <p data-i18n="tool_survey_desc">Record waste segregation habits, community barriers, and awareness levels during field visits.</p>
+            <a href="survey.html" class="btn btn-secondary" data-i18n="nav_survey">Survey</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_pledge_title">Household Pledge</h3>
+            <p data-i18n="tool_pledge_desc">Commit to simple daily waste segregation actions and generate a printable certificate.</p>
+            <a href="pledge.html" class="btn btn-secondary" data-i18n="nav_pledge">Pledge</a>
+          </div>
+          <div class="card">
+            <h3 data-i18n="tool_ewaste_title">E-Waste Centres</h3>
+            <p data-i18n="tool_ewaste_desc">Look up sample recycling plants and collection drop-off points with accepted item filters.</p>
+            <a href="ewaste-centers.html" class="btn btn-secondary" data-i18n="nav_ewaste">E-Waste Centres</a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why This Project Section -->
+      <section class="home-why-section" aria-labelledby="why-heading">
+        <h2 id="why-heading" data-i18n="home_why_heading">Why This Project</h2>
+        <p class="lead-text" data-i18n="home_why_intro">Mixed waste makes recycling and composting harder, hazardous items can contaminate other materials, and reusable resources end up in dumpsites.</p>
+        <div class="grid-3">
+          <div class="card">
+            <h3 data-i18n="home_why_p1_title">Confusion at source</h3>
+            <p data-i18n="home_why_p1_desc">Households often hesitate when sorting everyday packaging, soiled paper, or small electronic cables.</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="home_why_p2_title">Mixed collection risks</h3>
+            <p data-i18n="home_why_p2_desc">When batteries or glass break in organic waste, wet waste cannot be converted into clean agricultural compost.</p>
+          </div>
+          <div class="card">
+            <h3 data-i18n="home_why_p3_title">Local community impact</h3>
+            <p data-i18n="home_why_p3_desc">Segregating waste at home protects sanitation workers from injuries and keeps neighbourhood collection points cleaner.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

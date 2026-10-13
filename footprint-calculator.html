@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Household Waste Footprint Calculator</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .calc-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+    }
+    .slider-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+    .slider-val-badge {
+      font-weight: 700;
+      min-width: 48px;
+      text-align: right;
+    }
+    .breakdown-bar {
+      display: flex;
+      height: 28px;
+      width: 100%;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin: 1.25rem 0;
+      border: 1px solid var(--border);
+    }
+    .breakdown-segment {
+      height: 100%;
+      transition: width 150ms ease;
+    }
+    .seg-wet { background-color: var(--bin-wet); }
+    .seg-dry { background-color: var(--bin-dry); }
+    .seg-haz { background-color: var(--bin-hazardous); }
+    .seg-ewaste { background-color: var(--bin-ewaste); }
+    .breakdown-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+    .legend-box {
+      width: 14px;
+      height: 14px;
+      border-radius: 2px;
+    }
+    .result-box {
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.5rem;
+      margin-top: 2rem;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="calc_title">Household Waste Footprint Calculator</h1>
+      <p class="lead-text" data-i18n="calc_lead">Enter your household's weekly consumption and estimate your annual generation across waste streams.</p>
+
+      <div class="callout callout-warning">
+        <p><strong data-i18n="calc_disclaimer">This is an estimate based on assumed placeholder factors, not a direct environmental measurement.</strong></p>
+      </div>
+
+      <div class="calc-card">
+        <form id="calc-form" novalidate>
+          <div class="grid-2">
+            <!-- Members -->
+            <div class="form-group">
+              <label for="members" data-i18n="calc_members">Members in household</label>
+              <input type="number" id="members" min="1" max="25" value="4" required>
+              <div id="err-members" class="form-error"></div>
+            </div>
+
+            <!-- Wet waste per week -->
+            <div class="form-group">
+              <label for="wet-kg" data-i18n="calc_wet_kg">Kilograms of wet waste per week</label>
+              <input type="number" id="wet-kg" min="0" max="150" step="0.5" value="7" required>
+              <div id="err-wet" class="form-error"></div>
+            </div>
+
+            <!-- Dry waste per week -->
+            <div class="form-group">
+              <label for="dry-kg" data-i18n="calc_dry_kg">Kilograms of dry waste per week</label>
+              <input type="number" id="dry-kg" min="0" max="150" step="0.5" value="4" required>
+              <div id="err-dry" class="form-error"></div>
+            </div>
+
+            <!-- Batteries per year -->
+            <div class="form-group">
+              <label for="batteries" data-i18n="calc_batteries">Number of batteries discarded per year</label>
+              <input type="number" id="batteries" min="0" max="100" value="6" required>
+              <div id="err-batteries" class="form-error"></div>
+            </div>
+
+            <!-- Electronic items per year -->
+            <div class="form-group">
+              <label for="electronics" data-i18n="calc_electronics">Electronic items discarded per year (cables, phones, etc.)</label>
+              <input type="number" id="electronics" min="0" max="50" value="3" required>
+              <div id="err-electronics" class="form-error"></div>
+            </div>
+
+            <!-- Plastic bags per week -->
+            <div class="form-group">
+              <label for="bags" data-i18n="calc_bags">Plastic carry bags used per week</label>
+              <input type="number" id="bags" min="0" max="100" value="8" required>
+              <div id="err-bags" class="form-error"></div>
+            </div>
+          </div>
+
+          <!-- Segregation percentage slider -->
+          <div class="form-group" style="margin-top: 1rem;">
+            <label for="seg-pct" data-i18n="calc_seg_pct">Percentage of household waste currently segregated (0 to 100%)</label>
+            <div class="slider-container">
+              <input type="range" id="seg-pct" min="0" max="100" value="50">
+              <span id="slider-val" class="slider-val-badge">50%</span>
+            </div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" data-i18n="calc_submit_btn">Calculate Annual Estimate</button>
+          </div>
+        </form>
+
+        <!-- Calculation Results -->
+        <div id="results-box" class="result-box">
+          <h2 data-i18n="calc_results_heading">Estimated Annual Household Generation</h2>
+          <p class="lead-text" style="margin-bottom: 0.5rem;">
+            <span data-i18n="calc_total_waste">Total Estimated Waste:</span> <strong id="res-total-kg">0</strong> kg / year
+          </p>
+          <div class="grid-2" style="margin-top: 0.5rem; margin-bottom: 1.25rem;">
+            <div>
+              <span data-i18n="calc_segregated_amount">Estimated Segregated Waste:</span>
+              <strong id="res-seg-kg" style="color:var(--bin-wet);">0</strong> kg
+            </div>
+            <div>
+              <span data-i18n="calc_unsegregated_amount">Estimated Mixed / Unsegregated:</span>
+              <strong id="res-unseg-kg" style="color:var(--bin-hazardous);">0</strong> kg
+            </div>
+          </div>
+
+          <h3 data-i18n="calc_breakdown_heading">Annual Breakdown</h3>
+          <!-- Plain DIV breakdown bar -->
+          <div class="breakdown-bar" role="img" aria-label="Visual breakdown of waste categories">
+            <div id="bar-wet" class="breakdown-segment seg-wet" title="Wet Waste" style="width: 50%;"></div>
+            <div id="bar-dry" class="breakdown-segment seg-dry" title="Dry Waste" style="width: 35%;"></div>
+            <div id="bar-haz" class="breakdown-segment seg-haz" title="Hazardous Waste" style="width: 5%;"></div>
+            <div id="bar-ewaste" class="breakdown-segment seg-ewaste" title="E-Waste" style="width: 10%;"></div>
+          </div>
+
+          <!-- Breakdown Legend -->
+          <div class="breakdown-legend">
+            <div class="legend-item">
+              <span class="legend-box seg-wet"></span>
+              <span><span data-i18n="bin_wet">Wet Waste</span>: <strong id="val-wet-kg">0</strong> kg</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-box seg-dry"></span>
+              <span><span data-i18n="bin_dry">Dry Waste</span>: <strong id="val-dry-kg">0</strong> kg</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-box seg-haz"></span>
+              <span><span data-i18n="bin_hazardous">Hazardous Waste</span>: <strong id="val-haz-kg">0</strong> kg</span>
+            </div>
+            <div class="legend-item">
+              <span class="legend-box seg-ewaste"></span>
+              <span><span data-i18n="bin_ewaste">E-Waste</span>: <strong id="val-ewaste-kg">0</strong> kg</span>
+            </div>
+          </div>
+
+          <!-- Suggested Action from 5 R's -->
+          <div class="callout" style="margin-top: 1.5rem; margin-bottom: 0;">
+            <p><strong data-i18n="calc_suggested_action">Suggested action based on your inputs:</strong></p>
+            <p id="calc-suggested-text" style="margin-bottom:0;"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/footprint-calculator.js"></script>
+</body>
+</html>

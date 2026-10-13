@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - E-Waste Recycling Plants and Collection Points</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .facility-card {
+      border-left: 6px solid var(--bin-ewaste);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .facility-badge {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.55rem;
+      border-radius: var(--radius-sm);
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      width: fit-content;
+    }
+    .badge-plant {
+      background: rgba(123, 94, 167, 0.15);
+      color: var(--bin-ewaste);
+      border: 1px solid var(--bin-ewaste);
+    }
+    .badge-point {
+      background: rgba(58, 111, 176, 0.15);
+      color: var(--bin-dry);
+      border: 1px solid var(--bin-dry);
+    }
+    .tag-cloud {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.4rem;
+      margin-bottom: 1rem;
+    }
+    .tag-item {
+      font-size: 0.82rem;
+      padding: 0.15rem 0.5rem;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+    }
+    .checklist-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.5rem;
+      margin-top: 3rem;
+    }
+    .checklist-list {
+      margin-left: 1.5rem;
+      margin-top: 0.75rem;
+    }
+    .checklist-list li {
+      margin-bottom: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="ewaste_title">E-Waste Recycling Plants and Collection Points</h1>
+
+      <!-- Mandatory Demo Data Notice -->
+      <div class="callout callout-warning" role="alert">
+        <strong data-i18n="ewaste_notice_title">Notice: Demonstration Data</strong>
+        <p data-i18n="ewaste_notice" style="margin-top: 0.25rem;">
+          This list contains sample demo data for the project. Phone numbers and addresses are placeholders. Verify with the State Pollution Control Board or your municipal office before visiting.
+        </p>
+      </div>
+
+      <!-- Search & Filters Bar -->
+      <div class="card" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="grid-4" style="margin: 0; gap: 0.85rem;">
+          <!-- Text search -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="ewaste-search" class="visually-hidden">Search centre</label>
+            <input type="text" id="ewaste-search" data-i18n-placeholder="ewaste_search_ph" placeholder="Search centre by name, road, or area...">
+          </div>
+
+          <!-- District dropdown -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="district-select" class="visually-hidden">District</label>
+            <select id="district-select">
+              <option value="all" data-i18n="ewaste_district_all">All Districts</option>
+              <option value="Visakhapatnam">Visakhapatnam (విశాఖపట్నం)</option>
+              <option value="Vizianagaram">Vizianagaram (విజయనగరం)</option>
+              <option value="Vijayawada">Vijayawada (విజయవాడ)</option>
+              <option value="Srikakulam">Srikakulam (శ్రీకాకుళం)</option>
+              <option value="Rajahmundry">Rajahmundry (రాజమండ్రి)</option>
+              <option value="Tirupati">Tirupati (తిరుపతి)</option>
+              <option value="Guntur">Guntur (గుంటూరు)</option>
+              <option value="Hyderabad">Hyderabad (హైదరాబాద్)</option>
+            </select>
+          </div>
+
+          <!-- Type filter -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="type-select" class="visually-hidden">Facility Type</label>
+            <select id="type-select">
+              <option value="all" data-i18n="ewaste_type_all">All Facility Types</option>
+              <option value="plant" data-i18n="ewaste_type_plant">Recycling plant</option>
+              <option value="point" data-i18n="ewaste_type_point">Collection point</option>
+            </select>
+          </div>
+
+          <!-- Accepted item filter -->
+          <div class="form-group" style="margin-bottom: 0;">
+            <label for="item-filter-select" class="visually-hidden">Accepted Items</label>
+            <select id="item-filter-select">
+              <option value="all" data-i18n="ewaste_item_all">All Accepted Items</option>
+              <option value="mobile_phones" data-i18n="ewaste_item_phones">Mobile phones</option>
+              <option value="batteries" data-i18n="ewaste_item_batteries">Batteries</option>
+              <option value="computers" data-i18n="ewaste_item_computers">Computers</option>
+              <option value="appliances" data-i18n="ewaste_item_appliances">Appliances</option>
+              <option value="cables_chargers" data-i18n="ewaste_item_cables">Cables and chargers</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Results Count -->
+      <div id="ewaste-result-count" class="sub-lead" aria-live="polite"></div>
+
+      <!-- Facilities List (Responsive cards) -->
+      <div id="facilities-grid" class="grid-2"></div>
+
+      <!-- Empty State -->
+      <div id="ewaste-empty" class="card" style="display:none; text-align:center; padding: 2.5rem 1.5rem;">
+        <h3 data-i18n="ewaste_not_found">No e-waste centres matched your selected filters.</h3>
+        <p data-i18n="dir_not_found_tip">Please check your local municipal instructions or search with a different keyword.</p>
+      </div>
+
+      <!-- Checklist: How to Hand Over E-Waste -->
+      <section class="checklist-card" aria-labelledby="checklist-heading">
+        <h2 id="checklist-heading" data-i18n="ewaste_checklist_heading">How to Hand Over E-Waste Safely</h2>
+        <ul class="checklist-list">
+          <li data-i18n="ewaste_check_1">Wipe personal data, reset devices, and remove accounts before disposal.</li>
+          <li data-i18n="ewaste_check_2">Remove loose batteries where detachable and keep them in a small non-metallic pouch.</li>
+          <li data-i18n="ewaste_check_3">Keep electronics dry and unbroken. Do not smash screens or crush batteries.</li>
+          <li data-i18n="ewaste_check_4">Ask the authorised centre for an acknowledgement receipt or handover slip.</li>
+          <li data-i18n="ewaste_check_5">Never burn, melt, or dismantle e-waste at home. It releases toxic fumes and heavy metals.</li>
+        </ul>
+      </section>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/ewaste-centers.js"></script>
+</body>
+</html>

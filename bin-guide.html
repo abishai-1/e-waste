@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Household Bin Guide</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .guide-wet { border-left-color: var(--bin-wet); }
+    .guide-dry { border-left-color: var(--bin-dry); }
+    .guide-hazardous { border-left-color: var(--bin-hazardous); }
+    .guide-ewaste { border-left-color: var(--bin-ewaste); }
+    .guide-block { margin: 1rem 0; }
+    .guide-block h4 { font-size: 1.05rem; margin-bottom: 0.35rem; }
+    .guide-list { margin-left: 1.5rem; margin-bottom: 1rem; }
+    .guide-list li { margin-bottom: 0.35rem; }
+    .example-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+    .example-tag { background: var(--surface-alt); border: 1px solid var(--border); padding: 0.25rem 0.6rem; border-radius: var(--radius-sm); font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="guide_title">Household Bin Guide</h1>
+      <p class="lead-text" data-i18n="guide_lead">Detailed instructions on what goes into each bin, what must be kept out, handling practices, and common household examples.</p>
+      
+      <div class="callout">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+
+      <!-- 1. Green Wet Bin -->
+      <details class="guide-section guide-wet" open>
+        <summary>
+          <span><span data-i18n="bin_wet_color">Green</span> &bull; <span data-i18n="bin_wet">Wet Waste</span></span>
+        </summary>
+        <div class="guide-content">
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_in">What goes in</h4>
+            <ul class="guide-list" id="wet-in-list">
+              <!-- Dynamically populated or static fallback -->
+            </ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_out">What does NOT go in</h4>
+            <ul class="guide-list" id="wet-out-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_handling">Handling tips</h4>
+            <p id="wet-handling"></p>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_examples">Common household examples</h4>
+            <div class="example-tags" id="wet-examples"></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 2. Blue Dry Bin -->
+      <details class="guide-section guide-dry" open>
+        <summary>
+          <span><span data-i18n="bin_dry_color">Blue</span> &bull; <span data-i18n="bin_dry">Dry Waste</span></span>
+        </summary>
+        <div class="guide-content">
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_in">What goes in</h4>
+            <ul class="guide-list" id="dry-in-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_out">What does NOT go in</h4>
+            <ul class="guide-list" id="dry-out-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_handling">Handling tips</h4>
+            <p id="dry-handling"></p>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_examples">Common household examples</h4>
+            <div class="example-tags" id="dry-examples"></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 3. Red Hazardous Bin -->
+      <details class="guide-section guide-hazardous">
+        <summary>
+          <span><span data-i18n="bin_hazardous_color">Red</span> &bull; <span data-i18n="bin_hazardous">Hazardous Waste</span></span>
+        </summary>
+        <div class="guide-content">
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_in">What goes in</h4>
+            <ul class="guide-list" id="haz-in-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_out">What does NOT go in</h4>
+            <ul class="guide-list" id="haz-out-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_handling">Handling tips</h4>
+            <p id="haz-handling"></p>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_examples">Common household examples</h4>
+            <div class="example-tags" id="haz-examples"></div>
+          </div>
+        </div>
+      </details>
+
+      <!-- 4. Purple E-waste Bin -->
+      <details class="guide-section guide-ewaste">
+        <summary>
+          <span><span data-i18n="bin_ewaste_color">Purple</span> &bull; <span data-i18n="bin_ewaste">E-Waste</span></span>
+        </summary>
+        <div class="guide-content">
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_in">What goes in</h4>
+            <ul class="guide-list" id="ewaste-in-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_what_out">What does NOT go in</h4>
+            <ul class="guide-list" id="ewaste-out-list"></ul>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_handling">Handling tips</h4>
+            <p id="ewaste-handling"></p>
+          </div>
+          <div class="guide-block">
+            <h4 data-i18n="guide_examples">Common household examples</h4>
+            <div class="example-tags" id="ewaste-examples"></div>
+          </div>
+        </div>
+      </details>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/bin-guide.js"></script>
+</body>
+</html>

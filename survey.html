@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Community Waste Segregation Survey</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .survey-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+    }
+    .timing-toggle-group {
+      display: flex;
+      gap: 1.5rem;
+      padding: 0.85rem 1rem;
+      background: var(--surface-alt);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      margin-bottom: 1.25rem;
+    }
+    .volunteer-card {
+      background: var(--surface);
+      border: 1px solid var(--border-strong);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      margin-top: 3rem;
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="survey_title">Community Waste Segregation Survey</h1>
+      <p class="lead-text" data-i18n="survey_lead">Collect real feedback from households during Community Service Project field visits.</p>
+
+      <div class="survey-card">
+        <form id="survey-form" novalidate>
+          <!-- Timing Mode -->
+          <div class="form-group">
+            <label data-i18n="survey_mode_label">Survey Timing</label>
+            <div class="timing-toggle-group">
+              <label class="radio-label">
+                <input type="radio" name="survey-mode" value="before" checked>
+                <span data-i18n="survey_mode_before">Before session</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="survey-mode" value="after">
+                <span data-i18n="survey_mode_after">After session</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Name & Age Group -->
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="survey-name" data-i18n="survey_name">Name (optional)</label>
+              <input type="text" id="survey-name" data-i18n-placeholder="survey_name_ph" placeholder="Resident name">
+            </div>
+
+            <div class="form-group">
+              <label for="survey-age" data-i18n="survey_age">Age group</label>
+              <select id="survey-age" required>
+                <option value="" data-i18n="survey_age_select">-- Select age group --</option>
+                <option value="under_18" data-i18n="survey_age_u18">Under 18</option>
+                <option value="18_30" data-i18n="survey_age_18_30">18 to 30</option>
+                <option value="31_50" data-i18n="survey_age_31_50">31 to 50</option>
+                <option value="above_50" data-i18n="survey_age_51plus">Above 50</option>
+              </select>
+              <div id="err-survey-age" class="form-error"></div>
+            </div>
+          </div>
+
+          <!-- Area / Village -->
+          <div class="form-group">
+            <label for="survey-area" data-i18n="survey_area">Area / Village name</label>
+            <input type="text" id="survey-area" data-i18n-placeholder="survey_area_ph" placeholder="e.g., Ward 4, Anandapuram, Visakhapatnam" required>
+            <div id="err-survey-area" class="form-error"></div>
+          </div>
+
+          <!-- Currently Segregate? -->
+          <div class="form-group">
+            <label data-i18n="survey_currently_seg">Do you currently separate waste at home?</label>
+            <div>
+              <label class="radio-label">
+                <input type="radio" name="seg-current" value="yes" required>
+                <span data-i18n="survey_opt_yes">Yes</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="seg-current" value="sometimes">
+                <span data-i18n="survey_opt_sometimes">Sometimes</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="seg-current" value="no">
+                <span data-i18n="survey_opt_no">No</span>
+              </label>
+            </div>
+            <div id="err-survey-seg" class="form-error"></div>
+          </div>
+
+          <!-- Bins Currently Used -->
+          <div class="form-group">
+            <label data-i18n="survey_bins_used">Which bins or categories do you currently use? (Check all that apply)</label>
+            <div>
+              <label class="checkbox-label">
+                <input type="checkbox" name="bins-used" value="wet">
+                <span><span data-i18n="bin_wet_color">Green</span> &bull; <span data-i18n="bin_wet">Wet Waste</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="bins-used" value="dry">
+                <span><span data-i18n="bin_dry_color">Blue</span> &bull; <span data-i18n="bin_dry">Dry Waste</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="bins-used" value="hazardous">
+                <span><span data-i18n="bin_hazardous_color">Red</span> &bull; <span data-i18n="bin_hazardous">Hazardous Waste</span></span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="bins-used" value="ewaste">
+                <span><span data-i18n="bin_ewaste_color">Purple</span> &bull; <span data-i18n="bin_ewaste">E-Waste</span></span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Biggest Barrier -->
+          <div class="form-group">
+            <label data-i18n="survey_barrier">What is your biggest barrier to segregating waste?</label>
+            <div>
+              <label class="radio-label">
+                <input type="radio" name="barrier" value="space" required>
+                <span data-i18n="survey_barrier_space">Limited bin space at home</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="barrier" value="instructions">
+                <span data-i18n="survey_barrier_instructions">Unclear collection instructions</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="barrier" value="mixed_truck">
+                <span data-i18n="survey_barrier_mixed">No separate municipal collection (waste gets mixed in truck)</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="barrier" value="info">
+                <span data-i18n="survey_barrier_info">Not enough information on what goes where</span>
+              </label>
+              <label class="radio-label">
+                <input type="radio" name="barrier" value="other">
+                <span data-i18n="survey_barrier_other">Other barrier</span>
+              </label>
+            </div>
+            <div id="err-survey-barrier" class="form-error"></div>
+          </div>
+
+          <!-- 3 Awareness Questions -->
+          <div class="form-group" style="padding-top: 1rem; border-top: 1px solid var(--border);">
+            <h3>Awareness Check</h3>
+
+            <p><label data-i18n="survey_q1">Awareness Check 1: Should fruit and vegetable peels go into the Wet (Green) bin?</label></p>
+            <div style="margin-bottom: 1rem;">
+              <label class="radio-label"><input type="radio" name="sq1" value="yes" required> <span data-i18n="survey_opt_yes">Yes</span></label>
+              <label class="radio-label"><input type="radio" name="sq1" value="no"> <span data-i18n="survey_opt_no">No</span></label>
+            </div>
+
+            <p><label data-i18n="survey_q2">Awareness Check 2: Can used batteries be safely thrown into ordinary household dry waste?</label></p>
+            <div style="margin-bottom: 1rem;">
+              <label class="radio-label"><input type="radio" name="sq2" value="yes" required> <span data-i18n="survey_opt_yes">Yes</span></label>
+              <label class="radio-label"><input type="radio" name="sq2" value="no"> <span data-i18n="survey_opt_no">No</span></label>
+            </div>
+
+            <p><label data-i18n="survey_q3">Awareness Check 3: Do clean cardboard cartons belong in the Dry (Blue) bin?</label></p>
+            <div style="margin-bottom: 1rem;">
+              <label class="radio-label"><input type="radio" name="sq3" value="yes" required> <span data-i18n="survey_opt_yes">Yes</span></label>
+              <label class="radio-label"><input type="radio" name="sq3" value="no"> <span data-i18n="survey_opt_no">No</span></label>
+            </div>
+            <div id="err-survey-q" class="form-error"></div>
+          </div>
+
+          <!-- Doubts text field -->
+          <div class="form-group">
+            <label for="survey-doubts" data-i18n="survey_doubts">Any doubts or specific questions about waste collection?</label>
+            <textarea id="survey-doubts" rows="3" data-i18n-placeholder="survey_doubts_ph" placeholder="Write resident's questions or doubts here..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary" data-i18n="survey_submit_btn">Save Survey Response</button>
+
+          <div id="survey-success-banner" class="callout" style="display:none; margin-top:1.25rem;">
+            <p><strong data-i18n="survey_thank_you">Thank you. Your survey response has been saved on this device.</strong></p>
+          </div>
+        </form>
+      </div>
+
+      <!-- Volunteer Only Section -->
+      <section class="volunteer-card" aria-labelledby="volunteer-heading">
+        <h2 id="volunteer-heading" data-i18n="survey_admin_heading">Volunteer Section: Saved responses on this device</h2>
+        <p class="form-hint" data-i18n="survey_admin_note">All responses are stored strictly in this browser's localStorage. No remote server is used.</p>
+
+        <p style="margin-top: 1rem;">
+          <span data-i18n="survey_count_label">Total responses saved on this device:</span>
+          <strong id="response-count-badge">0</strong>
+        </p>
+
+        <div class="btn-group">
+          <button id="download-csv-btn" class="btn btn-secondary" type="button" data-i18n="survey_download_csv">Download CSV</button>
+          <button id="clear-records-btn" class="btn btn-danger" type="button" data-i18n="survey_clear_btn">Clear all saved responses</button>
+        </div>
+
+        <div class="table-wrapper">
+          <table id="responses-table">
+            <thead>
+              <tr>
+                <th data-i18n="survey_col_time">Timestamp</th>
+                <th data-i18n="survey_col_mode">Timing</th>
+                <th data-i18n="survey_col_area">Area/Village</th>
+                <th data-i18n="survey_col_age">Age</th>
+                <th data-i18n="survey_col_seg">Segregates?</th>
+                <th data-i18n="survey_col_barrier">Main Barrier</th>
+                <th data-i18n="survey_col_score">Awareness Score</th>
+              </tr>
+            </thead>
+            <tbody id="responses-tbody">
+              <!-- Dynamically rendered -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/survey.js"></script>
+</body>
+</html>

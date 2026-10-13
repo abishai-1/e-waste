@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Household Waste Segregation Pledge</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pledge-form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+      margin-top: 1.5rem;
+    }
+    /* Certificate design - Flat colours, 4-bin borders, NO gradients */
+    .certificate-container {
+      margin-top: 2.5rem;
+      display: none;
+    }
+    .certificate-card {
+      background: #FFFFFF;
+      color: #17352E;
+      border: 10px solid #DDE3DC;
+      border-image: linear-gradient(to right, #2E8B57 25%, #3A6FB0 25%, #3A6FB0 50%, #B94444 50%, #B94444 75%, #7B5EA7 75%) 1; /* Fallback border */
+      border: 6px solid #2E8B57; /* Solid flat border for strict no gradient rule */
+      border-radius: 4px;
+      padding: 2.5rem 2rem;
+      text-align: center;
+      box-sizing: border-box;
+      position: relative;
+    }
+    .cert-inner-border {
+      border: 2px solid #DDE3DC;
+      padding: 2rem 1.5rem;
+    }
+    .cert-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #17352E;
+      margin-bottom: 0.25rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .cert-subtitle {
+      font-size: 1.05rem;
+      color: #4F625C;
+      font-weight: 600;
+      margin-bottom: 1.75rem;
+    }
+    .cert-recipient {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2E8B57;
+      text-decoration: underline;
+      margin: 0.5rem 0;
+    }
+    .cert-actions-list {
+      text-align: left;
+      display: inline-block;
+      max-width: 650px;
+      margin: 1.5rem auto;
+      padding-left: 1.25rem;
+    }
+    .cert-actions-list li {
+      margin-bottom: 0.4rem;
+      font-size: 0.95rem;
+      color: #17352E;
+    }
+    .cert-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #DDE3DC;
+      font-size: 0.92rem;
+      color: #4F625C;
+    }
+
+    /* Print stylesheet: Hides everything except the certificate */
+    @media print {
+      body * {
+        visibility: hidden !important;
+      }
+      #certificate-wrapper, #certificate-wrapper * {
+        visibility: visible !important;
+      }
+      #certificate-wrapper {
+        position: absolute !important;
+        left: 0 !important;
+        top: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .cert-print-controls {
+        display: none !important;
+      }
+      .certificate-card {
+        border: 4px solid #17352E !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="pledge_title">Household Waste Segregation Pledge</h1>
+      <p class="lead-text" data-i18n="pledge_lead">Make a personal commitment to source waste segregation and print your certificate of participation.</p>
+
+      <div class="pledge-form-card">
+        <form id="pledge-form" novalidate>
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="pledge-name" data-i18n="pledge_name">Full Name</label>
+              <input type="text" id="pledge-name" data-i18n-placeholder="pledge_name_ph" placeholder="Enter your name for the certificate" required>
+              <div id="err-pledge-name" class="form-error"></div>
+            </div>
+
+            <div class="form-group">
+              <label for="pledge-area" data-i18n="pledge_area">Area / Locality / Village</label>
+              <input type="text" id="pledge-area" data-i18n-placeholder="pledge_area_ph" placeholder="Enter your area or city" required>
+              <div id="err-pledge-area" class="form-error"></div>
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-top: 1rem;">
+            <label data-i18n="pledge_actions_heading">Select the actions you commit to practise:</label>
+            <div>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pledge-action" value="act1" checked>
+                <span data-i18n="pledge_act_1">Keep wet and dry waste separate in daily household routines.</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pledge-action" value="act2" checked>
+                <span data-i18n="pledge_act_2">Never mix hazardous items (like chemicals and broken bulbs) with household waste.</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pledge-action" value="act3" checked>
+                <span data-i18n="pledge_act_3">Hand over e-waste only to authorised collection points or recycling channels.</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pledge-action" value="act4">
+                <span data-i18n="pledge_act_4">Carry a reusable cloth bag to refuse single-use plastic bags.</span>
+              </label>
+              <label class="checkbox-label">
+                <input type="checkbox" name="pledge-action" value="act5">
+                <span data-i18n="pledge_act_5">Compost kitchen food scraps or support local community composting.</span>
+              </label>
+            </div>
+            <div id="err-pledge-actions" class="form-error"></div>
+          </div>
+
+          <div style="margin-top: 1.5rem;">
+            <button type="submit" class="btn btn-primary" data-i18n="pledge_submit_btn">Generate My Pledge Certificate</button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Rendered Certificate Area -->
+      <section id="certificate-wrapper" class="certificate-container" aria-label="Commitment Certificate">
+        <div class="certificate-card">
+          <div class="cert-inner-border">
+            <h2 class="cert-title" data-i18n="pledge_cert_title">Certificate of Commitment</h2>
+            <p class="cert-subtitle" data-i18n="pledge_cert_subtitle">CleanEarth Community Service Project</p>
+
+            <p data-i18n="pledge_cert_certifies">This certifies that</p>
+            <div id="cert-name-display" class="cert-recipient">Resident Name</div>
+            <p><span data-i18n="pledge_cert_residing">from</span> <strong id="cert-area-display">Area</strong></p>
+            
+            <p style="margin-top: 1rem;" data-i18n="pledge_cert_text">has taken the household pledge to practise waste segregation at source and actively support a cleaner community.</p>
+
+            <div style="margin-top: 1.5rem; text-align: left;">
+              <strong data-i18n="pledge_cert_actions_title">Actions Committed:</strong>
+              <ul id="cert-actions-display" class="cert-actions-list"></ul>
+            </div>
+
+            <div class="cert-meta">
+              <div>
+                <span data-i18n="pledge_cert_date">Date of Commitment:</span> <strong id="cert-date-display">Date</strong>
+              </div>
+              <div>
+                <strong>CleanEarth CSP</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="cert-print-controls" style="margin-top: 1.5rem; text-align: center;">
+          <button id="print-cert-btn" class="btn btn-secondary" type="button" data-i18n="pledge_print_btn">Print / Save as PDF</button>
+        </div>
+      </section>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/pledge.js"></script>
+</body>
+</html>

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CleanEarth - Bin It Right Game</title>
+  <script>
+    (function() {
+      try {
+        var savedTheme = localStorage.getItem('cleanearth_theme');
+        if (savedTheme === 'dark' || savedTheme === 'light') {
+          document.documentElement.setAttribute('data-theme', savedTheme);
+        } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+          document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+          document.documentElement.setAttribute('data-theme', 'light');
+        }
+        var savedLang = localStorage.getItem('cleanearth_lang');
+        if (savedLang === 'te' || savedLang === 'en') {
+          document.documentElement.setAttribute('lang', savedLang);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Telugu:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .game-board {
+      margin-top: 1.5rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      padding: 1.75rem;
+    }
+    .game-status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .status-badge {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .item-display-box {
+      background: var(--surface-alt);
+      border: 2px dashed var(--border-strong);
+      border-radius: var(--radius-card);
+      padding: 2.25rem 1.5rem;
+      text-align: center;
+      margin-bottom: 1.75rem;
+      user-select: none;
+      cursor: grab;
+      transition: background-color 150ms ease, border-color 150ms ease;
+    }
+    .item-display-box:active {
+      cursor: grabbing;
+    }
+    .item-display-title {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+    .bin-action-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .game-bin-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      padding: 1.25rem 0.75rem;
+      border-radius: var(--radius-card);
+      border: 2px solid var(--border-strong);
+      background: var(--surface);
+      cursor: pointer;
+      font-family: inherit;
+      color: var(--text);
+      font-weight: 700;
+      font-size: 1rem;
+      transition: all 150ms ease;
+      min-height: 110px;
+    }
+    .game-bin-btn:hover {
+      background: var(--surface-alt);
+    }
+    .game-bin-btn.btn-wet { border-color: var(--bin-wet); }
+    .game-bin-btn.btn-wet:hover, .game-bin-btn.btn-wet.drag-over { background: rgba(46, 139, 87, 0.12); }
+    .game-bin-btn.btn-dry { border-color: var(--bin-dry); }
+    .game-bin-btn.btn-dry:hover, .game-bin-btn.btn-dry.drag-over { background: rgba(58, 111, 176, 0.12); }
+    .game-bin-btn.btn-hazardous { border-color: var(--bin-hazardous); }
+    .game-bin-btn.btn-hazardous:hover, .game-bin-btn.btn-hazardous.drag-over { background: rgba(185, 68, 68, 0.12); }
+    .game-bin-btn.btn-ewaste { border-color: var(--bin-ewaste); }
+    .game-bin-btn.btn-ewaste:hover, .game-bin-btn.btn-ewaste.drag-over { background: rgba(123, 94, 167, 0.12); }
+
+    .bin-key-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 0.1rem 0.35rem;
+    }
+    .feedback-banner {
+      padding: 1.1rem 1.25rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      display: none;
+    }
+    .feedback-banner.correct {
+      background: rgba(46, 139, 87, 0.15);
+      border: 1px solid var(--bin-wet);
+      color: var(--text);
+      display: block;
+    }
+    .feedback-banner.wrong {
+      background: rgba(185, 68, 68, 0.15);
+      border: 1px solid var(--bin-hazardous);
+      color: var(--text);
+      display: block;
+    }
+    .feedback-title {
+      font-weight: 700;
+      font-size: 1.1rem;
+      margin-bottom: 0.3rem;
+    }
+    .review-item {
+      padding: 0.75rem 1rem;
+      background: var(--surface-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      margin-bottom: 0.5rem;
+    }
+    @media (max-width: 768px) {
+      .bin-action-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="header-placeholder"></div>
+
+  <main id="main-content">
+    <div class="container">
+      <h1 data-i18n="game_title">Bin It Right: Sorting Game</h1>
+      <p class="lead-text" data-i18n="game_lead">Sort 15 random items into their correct bins. Use clicks, touch, number keys 1 to 4, or desktop drag and drop.</p>
+
+      <div class="game-board">
+        <!-- Live Play Screen -->
+        <div id="play-screen">
+          <div class="game-status-bar">
+            <div>
+              <span class="status-badge"><span data-i18n="game_round_label">Round</span>: <span id="round-indicator">1</span> / 15</span>
+            </div>
+            <div>
+              <span class="status-badge"><span data-i18n="game_score_label">Score</span>: <span id="score-indicator">0</span></span>
+            </div>
+            <div>
+              <span class="sub-lead" style="margin-bottom:0;"><span data-i18n="game_best_score">Best score on this device</span>: <strong id="best-score-indicator">0</strong></span>
+            </div>
+          </div>
+
+          <p class="form-hint" style="margin-bottom: 0.75rem;" data-i18n="game_drag_instruction">Drag this item into a bin below, or press the matching bin button:</p>
+
+          <!-- Current Item Display (Draggable) -->
+          <div id="item-box" class="item-display-box" draggable="true" tabindex="0" role="region" aria-label="Current item to sort">
+            <div id="item-name" class="item-display-title">---</div>
+            <div class="sub-lead" style="margin-bottom:0;" data-i18n="game_key_hint">Keyboard shortcuts: 1 = Wet, 2 = Dry, 3 = Hazardous, 4 = E-Waste</div>
+          </div>
+
+          <!-- Immediate Feedback Banner -->
+          <div id="feedback-banner" class="feedback-banner">
+            <div id="feedback-title" class="feedback-title"></div>
+            <div id="feedback-reason"></div>
+            <div style="margin-top: 0.85rem;">
+              <button id="next-item-btn" class="btn btn-primary" type="button" data-i18n="game_next_btn">Next Item</button>
+            </div>
+          </div>
+
+          <!-- Bin Buttons & Drop Targets -->
+          <div class="bin-action-grid" role="group" aria-label="Waste Bins">
+            <!-- 1. Wet -->
+            <button id="btn-wet" class="game-bin-btn btn-wet" type="button" data-bin="wet">
+              <span class="bin-key-tag">Key 1</span>
+              <span><span data-i18n="bin_wet_color">Green</span> &bull; <span data-i18n="bin_wet">Wet Waste</span></span>
+            </button>
+
+            <!-- 2. Dry -->
+            <button id="btn-dry" class="game-bin-btn btn-dry" type="button" data-bin="dry">
+              <span class="bin-key-tag">Key 2</span>
+              <span><span data-i18n="bin_dry_color">Blue</span> &bull; <span data-i18n="bin_dry">Dry Waste</span></span>
+            </button>
+
+            <!-- 3. Hazardous -->
+            <button id="btn-hazardous" class="game-bin-btn btn-hazardous" type="button" data-bin="hazardous">
+              <span class="bin-key-tag">Key 3</span>
+              <span><span data-i18n="bin_hazardous_color">Red</span> &bull; <span data-i18n="bin_hazardous">Hazardous Waste</span></span>
+            </button>
+
+            <!-- 4. E-Waste -->
+            <button id="btn-ewaste" class="game-bin-btn btn-ewaste" type="button" data-bin="ewaste">
+              <span class="bin-key-tag">Key 4</span>
+              <span><span data-i18n="bin_ewaste_color">Purple</span> &bull; <span data-i18n="bin_ewaste">E-Waste</span></span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Final Score Screen -->
+        <div id="game-over-screen" style="display: none;">
+          <h2 data-i18n="game_over_title">Game Completed</h2>
+          <p class="lead-text"><span data-i18n="game_final_score">Your final score</span>: <strong id="final-score-val">0</strong> / 15</p>
+
+          <div id="wrong-answers-container" style="margin: 1.5rem 0;">
+            <h3 data-i18n="game_wrong_heading">Items to review from this round:</h3>
+            <div id="wrong-answers-list"></div>
+          </div>
+
+          <button id="restart-game-btn" class="btn btn-primary" type="button" data-i18n="game_restart_btn">Play again</button>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-top: 2rem;">
+        <p data-i18n="municipal_note">Residents should also check local municipal instructions.</p>
+      </div>
+    </div>
+  </main>
+
+  <div id="footer-placeholder"></div>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/bin-it-right.js"></script>
+</body>
+</html>
